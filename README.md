@@ -13,7 +13,7 @@
 위는 참조 목소리(PromBoard 튜토리얼용으로 만든 합성 내레이션 5.8초), 아래는 그 목소리로 새 한국어 글을 읽힌 결과입니다. 참조 글은 비워 두고 Whisper 가 받아쓰게 했습니다. 각 소리의 위 띠는 파형, 아래 띠는 스펙트로그램(가로 = 시간, 세로 = 소리 높낮이, 밝을수록 큰 소리)입니다. [참조 듣기](docs/ko/audio/reference-ko.mp3?raw=true) · [복제 결과 듣기](docs/ko/audio/clone-ko.mp3?raw=true)
 
 - 플러그인 id: `promboard.omnivoice`
-- 필요한 앱: PromBoard 1.0.2 이상
+- 필요한 앱: PromBoard 1.0.3 이상
 - 지원 언어: 600여 개(한국어 · 영어 · 일본어 · 중국어 등). 설정의 언어 목록은 자주 쓰는 18개이고, 자동으로 두면 다른 언어도 읽습니다.
 - 라이선스: 플러그인 코드 Apache-2.0. 모델은 **비상업**(아래 「라이선스와 조건」)
 
@@ -118,7 +118,7 @@ README 그림 · 소리 다시 만들기: 노드 결과 WAV 를 설정 파일의
 Top: the reference voice (5.8 s of synthetic narration made for the PromBoard tutorial). Bottom: OmniVoice reading a new Korean sentence in that voice. The reference transcript was left empty and transcribed by Whisper. For each sound the upper strip is the waveform and the lower strip is the spectrogram (time to the right, pitch upward, brighter = louder). [Listen to the reference](docs/en/audio/reference-ko.mp3?raw=true) · [Listen to the clone](docs/en/audio/clone-ko.mp3?raw=true)
 
 - Plugin id: `promboard.omnivoice`
-- Requires PromBoard 1.0.2 or later
+- Requires PromBoard 1.0.3 or later
 - Languages: 600+ (Korean, English, Japanese, Chinese, …). The language setting lists 18 common ones; Auto reads the others too.
 - License: plugin code Apache-2.0. The model is **non-commercial** (see below).
 
