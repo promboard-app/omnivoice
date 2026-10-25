@@ -1,0 +1,11 @@
+{"title": {"ko": "OmniVoice 목소리 만들기 · 참조 없이 속성만 골라서", "en": "OmniVoice voice design · attributes only, no reference"},
+ "items": [
+  {"wav": "design-ko.wav", "name": "design-ko", "label": {"ko": "한국어 · 남성 · 중년 · 낮은 음", "en": "Korean · male · middle-aged · low pitch"},
+   "text": "안녕하세요. 오늘은 맑은 가을 하늘 아래 공원을 천천히 걸으며 노랗게 물든 은행나무를 구경했습니다. 따뜻한 차 한 잔과 함께 조용한 오후를 보내니 마음이 편안해졌어요.",
+   "meta": {"ko": "12.6초 소리 · 1.7초 걸림", "en": "12.6 s of audio in 1.7 s"}},
+  {"wav": "design-en.wav", "name": "design-en", "label": {"ko": "영어 · 여성 · 낮은 음 · 영국 억양", "en": "English · female · low pitch · British accent"},
+   "text": "The morning market opens at seven. Fresh bread, ripe tomatoes and a basket of green apples wait on the wooden table, and the baker waves hello as the first customers arrive.",
+   "meta": {"ko": "10.1초 소리 · 3.7초 걸림", "en": "10.1 s of audio in 3.7 s"}}
+ ],
+ "footer": {"ko": "RTX 4070 SUPER 12GB · 품질 보통(32단계) · 그래픽카드 메모리 최대 2.4GB", "en": "RTX 4070 SUPER 12 GB · quality normal (32 steps) · peak GPU memory 2.4 GB"},
+ "out": "design.png"}

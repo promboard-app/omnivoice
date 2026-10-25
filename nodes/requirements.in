@@ -1,0 +1,6 @@
+torch==2.8.0
+torchvision==0.23.0
+torchaudio==2.8.0
+omnivoice==0.2.1
+soundfile==0.14.0
+av==18.1.0

@@ -1,0 +1,11 @@
+{"title": {"ko": "OmniVoice 복제 · 참조 목소리 5.8초로 새 글 읽기", "en": "OmniVoice cloning · a new sentence from a 5.8 s reference"},
+ "items": [
+  {"wav": "ref-ko.wav", "name": "reference-ko", "label": {"ko": "참조 목소리 (PromBoard 튜토리얼용 합성 내레이션)", "en": "Reference voice (synthetic narration made for the PromBoard tutorial)"},
+   "text": "오늘 아침 고소함 한 잔, 모모커피 신메뉴 흑임자 크림 라테.",
+   "meta": {"ko": "5.8초 · 참조 글은 Whisper 가 받아씀", "en": "5.8 s · transcript by Whisper"}},
+  {"wav": "clone-ko.wav", "name": "clone-ko", "label": {"ko": "복제 결과 · 한국어", "en": "Clone · Korean"},
+   "text": "안녕하세요. 오늘은 맑은 가을 하늘 아래 공원을 천천히 걸으며 노랗게 물든 은행나무를 구경했습니다. 따뜻한 차 한 잔과 함께 조용한 오후를 보내니 마음이 편안해졌어요.",
+   "meta": {"ko": "14.4초 소리 · 6.2초 걸림", "en": "14.4 s of audio in 6.2 s"}}
+ ],
+ "footer": {"ko": "RTX 4070 SUPER 12GB · 품질 보통(32단계) · Whisper 받아쓰기 포함 그래픽카드 메모리 최대 5.4GB", "en": "RTX 4070 SUPER 12 GB · quality normal (32 steps) · peak GPU memory 5.4 GB including Whisper transcription"},
+ "out": "hero.png"}

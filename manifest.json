@@ -1,0 +1,487 @@
+{
+  "schema": 1,
+  "id": "promboard.omnivoice",
+  "version": "1.0.0",
+  "name": "OmniVoice — 목소리 복제 · 속성으로 목소리 만들기",
+  "description": "글을 읽어 목소리(WAV)로 만든다. 참조 목소리 몇 초를 이으면 그 목소리로 읽고(복제), 참조 없이 성별 · 나이 · 음높이 · 속삭임 · 영어 억양을 고르면 그 속성의 목소리를 만든다. 한국어를 포함한 600여 개 언어를 읽는다. 모델은 k2-fsa 공식 OmniVoice(0.6B, 3.3GB)를 허깅페이스에서 받는다. 모델은 비상업(CC-BY-NC)이고, 소리 토크나이저는 Boson Higgs Audio 2 Community License 를 따른다. 허락 없는 목소리 복제 · 사칭은 금지다.",
+  "author": "PromBoard",
+  "license": "Apache-2.0",
+  "app": ">=1.0.2",
+  "repository": "https://github.com/promboard-app/omnivoice",
+  "icon": "icon.png",
+  "contents": [
+    "nodes"
+  ],
+  "nonCommercial": true,
+  "licenseNotice": {
+    "conditions": "모델 가중치는 CC-BY-NC(비상업, 학습 데이터 Emilia 제약). 소리 토크나이저는 Boson Higgs Audio 2 Community License(Llama 3 기반): 배포 · 서비스에 쓰면 'Built with Higgs Materials licensed from Boson AI' 표기, 연간 사용자 10만 명 초과는 Boson 의 별도 허가, 결과물로 다른 대형 언어 모델 개선 금지. 허락 없는 목소리 복제 · 사칭 · 사기에 쓰지 않는다(공식 고지).",
+    "url": "https://huggingface.co/k2-fsa/OmniVoice/blob/main/audio_tokenizer/LICENSE"
+  },
+  "nodes": [
+    {
+      "id": "omnivoice",
+      "label": "OmniVoice 목소리",
+      "description": "읽을 글을 이으면 목소리 WAV(24kHz)를 낸다. 참조 목소리(3~10초 말소리)를 이으면 그 목소리로 읽고, 참조 글에는 그 소리에서 말한 글을 잇는다. 참조가 없으면 고른 속성으로 목소리를 만들고, 속성도 고르지 않으면 모델이 목소리를 고른다. 글 안에 [laughter] · [sigh] 같은 표시를 넣으면 웃음 · 한숨을 낸다.",
+      "inputs": [
+        {
+          "id": "text",
+          "type": "text",
+          "label": "읽을 글",
+          "required": true
+        },
+        {
+          "id": "ref-audio",
+          "type": "audio",
+          "label": "참조 목소리 (3~10초)",
+          "required": false
+        },
+        {
+          "id": "ref-text",
+          "type": "text",
+          "label": "참조 글 (참조 소리의 대사)",
+          "required": false
+        }
+      ],
+      "outputs": [
+        {
+          "id": "audio",
+          "type": "audio",
+          "label": "목소리"
+        }
+      ],
+      "settings": [
+        {
+          "id": "language",
+          "label": "언어",
+          "help": "읽을 글의 언어. 자동은 모델이 글을 보고 정한다. 알려 주면 조금 더 정확하다.",
+          "type": "select",
+          "options": [
+            {
+              "value": "auto",
+              "label": "자동"
+            },
+            {
+              "value": "ko",
+              "label": "한국어"
+            },
+            {
+              "value": "en",
+              "label": "영어"
+            },
+            {
+              "value": "ja",
+              "label": "일본어"
+            },
+            {
+              "value": "zh",
+              "label": "중국어"
+            },
+            {
+              "value": "yue",
+              "label": "광둥어"
+            },
+            {
+              "value": "es",
+              "label": "스페인어"
+            },
+            {
+              "value": "fr",
+              "label": "프랑스어"
+            },
+            {
+              "value": "de",
+              "label": "독일어"
+            },
+            {
+              "value": "ru",
+              "label": "러시아어"
+            },
+            {
+              "value": "pt",
+              "label": "포르투갈어"
+            },
+            {
+              "value": "it",
+              "label": "이탈리아어"
+            },
+            {
+              "value": "vi",
+              "label": "베트남어"
+            },
+            {
+              "value": "th",
+              "label": "태국어"
+            },
+            {
+              "value": "id",
+              "label": "인도네시아어"
+            },
+            {
+              "value": "hi",
+              "label": "힌디어"
+            },
+            {
+              "value": "tr",
+              "label": "튀르키예어"
+            },
+            {
+              "value": "nl",
+              "label": "네덜란드어"
+            },
+            {
+              "value": "pl",
+              "label": "폴란드어"
+            }
+          ],
+          "default": "auto"
+        },
+        {
+          "id": "gender",
+          "label": "성별",
+          "help": "참조 목소리가 없을 때만 쓴다(목소리 만들기).",
+          "type": "select",
+          "options": [
+            {
+              "value": "auto",
+              "label": "고르지 않음"
+            },
+            {
+              "value": "male",
+              "label": "남성"
+            },
+            {
+              "value": "female",
+              "label": "여성"
+            }
+          ],
+          "default": "auto"
+        },
+        {
+          "id": "age",
+          "label": "나이",
+          "help": "참조 목소리가 없을 때만 쓴다(목소리 만들기).",
+          "type": "select",
+          "options": [
+            {
+              "value": "auto",
+              "label": "고르지 않음"
+            },
+            {
+              "value": "child",
+              "label": "어린이"
+            },
+            {
+              "value": "teenager",
+              "label": "10대"
+            },
+            {
+              "value": "young adult",
+              "label": "청년"
+            },
+            {
+              "value": "middle-aged",
+              "label": "중년"
+            },
+            {
+              "value": "elderly",
+              "label": "노년"
+            }
+          ],
+          "default": "auto"
+        },
+        {
+          "id": "pitch",
+          "label": "음높이",
+          "help": "참조 목소리가 없을 때만 쓴다(목소리 만들기).",
+          "type": "select",
+          "options": [
+            {
+              "value": "auto",
+              "label": "고르지 않음"
+            },
+            {
+              "value": "very low pitch",
+              "label": "아주 낮게"
+            },
+            {
+              "value": "low pitch",
+              "label": "낮게"
+            },
+            {
+              "value": "moderate pitch",
+              "label": "보통"
+            },
+            {
+              "value": "high pitch",
+              "label": "높게"
+            },
+            {
+              "value": "very high pitch",
+              "label": "아주 높게"
+            }
+          ],
+          "default": "auto"
+        },
+        {
+          "id": "whisper",
+          "label": "속삭이기",
+          "help": "참조 목소리가 없을 때만 쓴다(목소리 만들기).",
+          "type": "boolean",
+          "default": false
+        },
+        {
+          "id": "accent",
+          "label": "영어 억양",
+          "help": "참조 목소리가 없고 영어 글을 읽을 때 쓴다(목소리 만들기).",
+          "type": "select",
+          "options": [
+            {
+              "value": "none",
+              "label": "고르지 않음"
+            },
+            {
+              "value": "american accent",
+              "label": "미국"
+            },
+            {
+              "value": "british accent",
+              "label": "영국"
+            },
+            {
+              "value": "australian accent",
+              "label": "호주"
+            },
+            {
+              "value": "canadian accent",
+              "label": "캐나다"
+            },
+            {
+              "value": "indian accent",
+              "label": "인도"
+            },
+            {
+              "value": "korean accent",
+              "label": "한국"
+            },
+            {
+              "value": "japanese accent",
+              "label": "일본"
+            },
+            {
+              "value": "chinese accent",
+              "label": "중국"
+            },
+            {
+              "value": "portuguese accent",
+              "label": "포르투갈"
+            },
+            {
+              "value": "russian accent",
+              "label": "러시아"
+            }
+          ],
+          "default": "none"
+        },
+        {
+          "id": "speed",
+          "label": "빠르기",
+          "help": "1 보다 크면 빠르게, 작으면 느리게 읽는다. 길이를 정하면 이 값은 쓰지 않는다.",
+          "type": "number",
+          "default": 1,
+          "min": 0.5,
+          "max": 2,
+          "step": 0.05
+        },
+        {
+          "id": "duration",
+          "label": "길이 (초)",
+          "help": "0 이면 글에 맞춰 모델이 정한다. 값을 주면 그 길이에 맞춰 읽는다.",
+          "type": "number",
+          "default": 0,
+          "min": 0,
+          "max": 600,
+          "step": 0.5
+        },
+        {
+          "id": "quality",
+          "label": "품질",
+          "help": "보통은 32단계, 빠르게는 16단계로 만든다(공식 권장 두 값).",
+          "type": "select",
+          "options": [
+            {
+              "value": "normal",
+              "label": "보통"
+            },
+            {
+              "value": "fast",
+              "label": "빠르게"
+            }
+          ],
+          "default": "normal"
+        },
+        {
+          "id": "transcribe",
+          "label": "참조 글 받아쓰기",
+          "help": "참조 글을 잇지 않았을 때 Whisper 로 참조 소리를 받아 적는다. 고르면 Whisper large-v3-turbo(1.6GB)를 더 받는다.",
+          "type": "select",
+          "options": [
+            {
+              "value": "manual",
+              "label": "직접 잇기"
+            },
+            {
+              "value": "whisper",
+              "label": "Whisper 로 받아쓰기"
+            }
+          ],
+          "default": "manual"
+        }
+      ]
+    }
+  ],
+  "python": {
+    "version": "3.12",
+    "torch": "host",
+    "lock": {
+      "win": "nodes/requirements-win.txt",
+      "linux": "nodes/requirements-linux.txt",
+      "mac": "nodes/requirements-mac.txt"
+    },
+    "entry": "nodes.main"
+  },
+  "gpu": {
+    "vramMinMb": 3072,
+    "cpuAllowed": true
+  },
+  "permissions": {},
+  "requires": {
+    "models": [
+      {
+        "source": "huggingface",
+        "repo": "k2-fsa/OmniVoice",
+        "revision": "c5fdb5ccb189668d56333f77ba2629f4cd7535f4",
+        "license": "CC-BY-NC",
+        "files": [
+          {
+            "path": "chat_template.jinja",
+            "bytes": 4168,
+            "sha256": "a55ee1b1660128b7098723e0abcd92caa0788061051c62d51cbe87d9cf1974d8"
+          },
+          {
+            "path": "config.json",
+            "bytes": 2238,
+            "sha256": "5e359117e13b420c5e0c925d4aba650d624767131f1d1746928f8b850d5dc372"
+          },
+          {
+            "path": "model.safetensors",
+            "bytes": 2450344112,
+            "sha256": "730839316de585f4c8298ec0e1712efc10fb19c6fa4e36eb741cb8d51ebcf6aa"
+          },
+          {
+            "path": "tokenizer.json",
+            "bytes": 11423986,
+            "sha256": "408f669b7e2b045fdf54201d815bd364e6667dbd845115da81239c40bc6dcfd1"
+          },
+          {
+            "path": "tokenizer_config.json",
+            "bytes": 533,
+            "sha256": "49f78845596a82bf15c83673794bdf9f76f812b11f60ab6a2239d9be65b00676"
+          }
+        ]
+      },
+      {
+        "source": "huggingface",
+        "repo": "k2-fsa/OmniVoice",
+        "revision": "c5fdb5ccb189668d56333f77ba2629f4cd7535f4",
+        "license": "LicenseRef-Boson-Higgs-Audio-2-Community",
+        "files": [
+          {
+            "path": "audio_tokenizer/config.json",
+            "bytes": 2531,
+            "sha256": "eefb20806f7104e77c9a5277c9df0f9bb8826b08eb1d4e8ab2b9829b6ef9fac1"
+          },
+          {
+            "path": "audio_tokenizer/model.safetensors",
+            "bytes": 805665628,
+            "sha256": "fe7c5e8785e0a05833e1bfc3e002ec7f55af21e306b2e7154a448c1f54ccfb0d"
+          },
+          {
+            "path": "audio_tokenizer/preprocessor_config.json",
+            "bytes": 206,
+            "sha256": "ae61eea88558608ee2fa86d2aec9fce8d99a5ff75d09cb7651ccce21ae1d9084"
+          }
+        ]
+      },
+      {
+        "source": "huggingface",
+        "repo": "openai/whisper-large-v3-turbo",
+        "revision": "41f01f3fe87f28c78e2fbf8b568835947dd65ed9",
+        "license": "MIT",
+        "files": [
+          {
+            "path": "added_tokens.json",
+            "bytes": 34648,
+            "sha256": "3c51f66c4c21f9e126970078f11ae77a78c74aee8df606ee9daba86e467108e0"
+          },
+          {
+            "path": "config.json",
+            "bytes": 1256,
+            "sha256": "c5b526b3e3cd64cd8940dabb45e8ba726629e22d8ed389c29b552f9140daf04a"
+          },
+          {
+            "path": "generation_config.json",
+            "bytes": 3772,
+            "sha256": "cce11bfe3aaa6ae9e072ea2637caaec8795e68d9b67e655a5af16ee509681a4c"
+          },
+          {
+            "path": "merges.txt",
+            "bytes": 493869,
+            "sha256": "2df2990a395e35e8dfbc7511e08c12d56018d8d04691e0133e5d63b21e154dc6"
+          },
+          {
+            "path": "model.safetensors",
+            "bytes": 1617824864,
+            "sha256": "542566a422ae4f3fd23f1ba11add198fca01bbf82e66e6a2857b3f608b1eb9d1"
+          },
+          {
+            "path": "normalizer.json",
+            "bytes": 52666,
+            "sha256": "bf1c507dc8724ca9cf9903640dacfb69dae2f00edee4f21ceba106a7392f26dd"
+          },
+          {
+            "path": "preprocessor_config.json",
+            "bytes": 340,
+            "sha256": "7ccc62c6f2765af1f3b46c00c9b5894426835a05021c8b9c01eecb6dfb542711"
+          },
+          {
+            "path": "special_tokens_map.json",
+            "bytes": 2186,
+            "sha256": "baea4ea09372eb4fca86b4e4346139fd73cb807d5087e9de0948e971739c3e74"
+          },
+          {
+            "path": "tokenizer.json",
+            "bytes": 2710337,
+            "sha256": "297b13372ac43916285644fb9687add3cc62ee2a1adb60da3dc25cc94c1871fd"
+          },
+          {
+            "path": "tokenizer_config.json",
+            "bytes": 282843,
+            "sha256": "844b642c73a91359722f47b35705f7174686df33d252695d8572cf9ac03a6389"
+          },
+          {
+            "path": "vocab.json",
+            "bytes": 1036558,
+            "sha256": "e2aa043ef015641d363d8288e7c241c85e36a5c761fb303598e0710233344387"
+          }
+        ],
+        "when": {
+          "node": "omnivoice",
+          "setting": "transcribe",
+          "values": [
+            "whisper"
+          ]
+        }
+      }
+    ]
+  }
+}
